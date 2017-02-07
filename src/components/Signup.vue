@@ -29,12 +29,18 @@
                     </div>
                 </div>
                 <div style="margin-top: 30px">
-                    <button class="btn btn-warning" v-on:click="">Submit</button>
+                    <button class="btn btn-warning" v-on:click="submit">Submit</button>
                 </div>
             </div>
         </div>
     </div>
 </template>
+
+<script>
+export default {
+  name: 'signup'
+}
+</script>
 
 <style>
 .container div {

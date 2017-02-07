@@ -11,19 +11,24 @@
                     <div class="radio">
                         <label for="credit_type">
                             <input type="radio">
-                            <div id="cards">
-                                <img src="../assets/visa.png">
-                                <img src="../assets/discover.png">
-                            </div>
+                            Credit Card
                         <label>
-                    </div>
-                    <div class="radio">
+                        <label for="paypal">
+                            <input type="radio">
+                            Paypal
+                        <label>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </template>
+
+<script>
+export default {
+  name: 'payment'
+}
+</script>
 
 <style>
 #payment-method {
