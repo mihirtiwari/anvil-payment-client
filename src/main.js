@@ -7,9 +7,8 @@ import Signup from './components/Signup.vue'
 import Login from './components/Login.vue'
 import Payment from './components/Payment.vue'
 import VueRouter from 'vue-router'
-import VueResource from 'vue-resource'
 
-Vue.use(VueResource)
+// Vue.use(VueResource)
 Vue.use(VueRouter)
 
 const routes = [
