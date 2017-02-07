@@ -19,5 +19,7 @@ export default {
 #app img{
     margin: auto;
     display: block;
+    height: 15%;
+    width: 15%;
 }
 </style>

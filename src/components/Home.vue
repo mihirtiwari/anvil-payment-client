@@ -1,16 +1,47 @@
 <template>
-    <div class="home" id="buttons">
-        <a class="btn btn-warning btn-lg" href="#" role="button">Sign Up</a>
-        <a class="btn btn-warning btn-lg" href="#" role="button">Login</a>
+    <div id="home">
+        <div id="buttons" class="col-md-offset-3 col-md-6">
+            <p>
+                <button type="button" class="btn btn-warning">
+                    <router-link to="/signup" class="link">
+                        Sign up
+                    </router-link>
+                </button>
+            </p>
+            <p>
+                <button type="button" class="btn btn-warning">
+                    <router-link to="/login" class="link">
+                        Login
+                    </router-link>
+                </button>
+            </p>
+        </div>
+        <router-view></router-view>
     </div>
 </template>
 
+
+
 <style>
-a {
-    width: 10%;
+.btn {
+    background-color: #FFCD2E;
+}
+
+button {
+    width: 30%;
 }
 
 #buttons {
-    margin-top: 100px;
+    margin-top: 150px;
+    text-align: center;
+}
+
+#buttons p {
+    text-align: center;
+}
+
+.link {
+    text-decoration: none;
+    font-size: 30px;
 }
 </style>
