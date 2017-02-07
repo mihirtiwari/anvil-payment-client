@@ -41,7 +41,6 @@ button {
 }
 
 .link {
-    text-decoration: none;
     font-size: 30px;
 }
 </style>
