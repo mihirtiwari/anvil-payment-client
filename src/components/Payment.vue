@@ -10,14 +10,18 @@
                 <div class="form-group">
                     <div class="radio">
                         <label for="credit_type">
-                            <input type="radio">
+                            <input type="radio" name = "only">
                             Credit Card
                         <label>
+
                         <label for="paypal">
-                            <input type="radio">
+                            <input type="radio" name= "only">
                             Paypal
                         <label>
                     </div>
+                </div>
+                <div style="margin-top: 30px">
+                    <button class="btn btn-warning">Submit</button>
                 </div>
             </div>
         </div>
@@ -35,6 +39,11 @@ export default {
     float: left;
     font-weight: bold;
     font-size: 15px;
+    /*padding-top: 11px;*/
+}
+
+.radio {
+    display: inline;
 }
 
 #cards img {

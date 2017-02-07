@@ -29,7 +29,7 @@
                     </div>
                 </div>
                 <div style="margin-top: 30px">
-                    <button class="btn btn-warning" v-on:click="submit">Submit</button>
+                    <button class="btn btn-warning"><router-link to="/payment">Submit</router-link></button>
                 </div>
             </div>
         </div>
