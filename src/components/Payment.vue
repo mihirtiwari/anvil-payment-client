@@ -8,15 +8,15 @@
             <div class="col-md-8 col-md-offset-2" style="margin-top: 50px">
                 <p id="payment-method">Select a payment method: </p>
                 <div class="form-group">
-                    <div class="radio">
+                    <div id="radio1">
                         <label for="credit_type">
                             <input type="radio" name = "only">
-                            Credit Card
+                            <span class="names">Credit Card</span>
                         <label>
 
                         <label for="paypal">
                             <input type="radio" name= "only">
-                            Paypal
+                            <span class="names">Paypal</span>
                         <label>
                     </div>
                 </div>
@@ -37,14 +37,20 @@ export default {
 <style>
 #payment-method {
     float: left;
-    font-weight: bold;
+    font-weight: bold;  
     font-size: 15px;
     /*padding-top: 11px;*/
 }
 
-.radio {
-    display: inline;
+.names {
+    font-weight: normal;
+    padding-left: 10px;
+    padding-right: 30px;
 }
+
+input[type="radio"]:checked+span { 
+    font-weight: bold;
+ }
 
 #cards img {
     width: 20%;
