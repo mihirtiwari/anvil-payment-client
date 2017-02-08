@@ -28,21 +28,33 @@
 
 <script>
 // import auth from '../auth'
-// import Vue from 'vue'
-import {router} from '../main.js'
+import Vue from 'vue'
+import Payment from './Payment.vue'
+
 export default {
   name: 'login',
+  components: {
+      Payment
+  },
   data: function () {
     return {
       credentials: {
         email: '',
         password: ''
-      }
+      },
+      authenticated: false
     }
   },
+  // computed : {
+  //     authenticated: function () {
+  //         return this.authenticated = true
+  //     }
+  // },
   methods: {
       //change this
     submit: function () {
+        // this.authenticated = true
+        // window.location.href = "/#/payment"
         var data = "password=" + this.credentials.password + "&email=" + this.credentials.email
         var xhr = new XMLHttpRequest()
         xhr.withCredentials = true
@@ -52,12 +64,15 @@ export default {
                 if (response["message"] === "Missing credentials"){
                     window.alert("Please fill in all boxes")
                 }
+                else if (response["message"] === "Password is wrong"){
+                    window.alert("Invalid password")
+                }
                 else if (response["message"] === "User not found"){
                     window.alert("Invalid email and/or password")
                 }
                 else {
                     localStorage.setItem('token', response["token"])
-                    router.push('/payment')
+                    window.location.href = "/#/payment"
                 }
             }
         })

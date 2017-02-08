@@ -29,7 +29,7 @@
 
                         <div class="form-group">
                             <p class="label">Card Number: </p>
-                            <input type="text" size="20" class="form-control" placeholder="Card Number" data-stripe="number">
+                            <input type="text" size="20" class="form-control" placeholder="Card Number" data-stripe="number" v-model="this.details.number">
                                 <!-- <span>Card Number</span>
                                 <input type="text" size="20" data-stripe="number">
                             </label> -->
@@ -37,12 +37,12 @@
 
                         <div class="form-group">
                             <p class="label">Expiration (MM/YY): </p>
-                            <input type="text" size="5" class="form-control" data-stripe="exp_month_year" placeholder="MM/YY">
+                            <input type="text" size="5" class="form-control" data-stripe="exp_month_year" placeholder="MM/YY" v-model="this.details.exp_month_year">
                         </div>
 
                         <div class="form-group">
                             <p class="label">CVC: </p>
-                            <input type="text" class="form-control" size="4" data-stripe="cvc" placeholder="CVC">
+                            <input type="text" class="form-control" size="4" data-stripe="cvc" placeholder="CVC" v-model="this.details.cvc">
                             <!-- <label>
                                 <span>CVC</span>
                                 <input type="text" size="4" data-stripe="cvc">
@@ -51,7 +51,7 @@
 
                         <div class="form-group">
                             <p class="label">Billing ZIP Code: </p>
-                            <input type="text" class="form-control "size="6" data-stripe="address_zip" placeholder="Billing ZIP Code">
+                            <input type="text" class="form-control "size="6" data-stripe="address_zip" placeholder="Billing ZIP Code" v-model="this.details.zip">
                             <!-- <label>
                                 <span>Billing ZIP Code</span>
                                 <input type="text" size="6" data-stripe="address_zip">
@@ -66,6 +66,60 @@
         </div>
     </div>
 </template>
+
+<script>
+export default {
+    name: 'payment',
+    data: function () {
+        return {
+            details: {
+                number: '',
+                exp_month_year: '',
+                cvc: '',
+                zip: ''
+            }
+        }
+    },
+    methods: {
+        submit: function () {
+            var details = {
+                num: this.details.number,
+                exp: this.details.exp_month_year,
+                cvc: this.details.cvc,
+                zip: this.details.zip
+            }
+
+            Stripe.card.createToken(details, stripeResponseHandler)
+        }
+        // stripeResponseHandler function (status, response) {
+        //
+        // }
+    }
+}
+
+function stripeResponseHandler(status, response) {
+  // Grab the form:
+  // var $form = $('#payment-form');
+
+  if (response.error) { // Problem!
+    window.alert("There was an error!")
+    // Show the errors on the form:
+    // $form.find('.payment-errors').text(response.error.message);
+    // $form.find('.submit').prop('disabled', false); // Re-enable submission
+
+  } else { // Token was created!
+
+    // Get the token ID:
+    var token = response.id;
+
+    // Insert the token ID into the form so it gets submitted to the server:
+    $form.append($('<input type="hidden" name="stripeToken">').val(token));
+
+    // Submit the form:
+    $form.get(0).submit();
+  }
+};
+</script>
 
 <style>
 .label {
