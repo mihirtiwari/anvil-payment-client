@@ -7,11 +7,14 @@
   "scripts": {
     "dev": "node build/dev-server.js",
     "build": "node build/build.js",
+    "postinstall": "npm run build",
+    "start": "node server.js",
     "lint": "eslint"
   },
   "dependencies": {
     "@types/lodash.isarray": "^4.0.1",
     "bootstrap": "^3.3.5",
+    "express": "^4.14.1",
     "lodash": "^4.17.4",
     "lodash.isarray": "^4.0.0",
     "vue": "^2.1.0",
