@@ -6,9 +6,10 @@ import App from './App'
 import Signup from './components/Signup.vue'
 import Login from './components/Login.vue'
 import Payment from './components/Payment.vue'
+import VueResource from 'vue-resource'
 import VueRouter from 'vue-router'
 
-// Vue.use(VueResource)
+Vue.use(VueResource)
 Vue.use(VueRouter)
 
 const routes = [

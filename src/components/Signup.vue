@@ -19,6 +19,7 @@
                         <p>Email: </p>
                         <input type="email" class="form-control" placeholder="email@email.com">
                     </div>
+                    //need to check for passwords matching and that no field is empty
                     <div class="form-group">
                         <p>Password: </p>
                         <input type="password" class="form-control" placeholder="Enter your password">
@@ -37,8 +38,62 @@
 </template>
 
 <script>
+// import auth from '../auth'
+// import Vue from 'vue'
+
 export default {
-  name: 'signup'
+  name: 'signup',
+  data: function () {
+    return {
+      credentials: {
+        email: '',
+        password: '',
+        first_name: '',
+        last_name: ''
+      }
+    }
+  },
+  methods: {
+      //change this
+    submit: function () {
+        var data = "password=" + this.credentials.password + "&email=" +
+        this.credentials.email + "&name=" + this.credentials.first_name + "&nameLast=" + this.credentials.last_name
+
+        var xhr = new XMLHttpRequest()
+        xhr.withCredentials = true
+
+        xhr.addEventListener("readystatechange", function () {
+            if (this.readyState === 4) {
+                // var response = JSON.parse(this.responseText)
+                // if (response["message"] === "Missing credentials"){
+                //     window.alert("Please fill in all boxes")
+                // }
+                // else if (response["message"] === "User not found"){
+                //     window.alert("Invalid email and/or password")
+                // }
+                // else {
+                //     console.log("success")
+                // }
+                console.log("works")
+            }
+        })
+
+        xhr.open("POST", "https://anvil-payments.herokuapp.com/api/login")
+        xhr.setRequestHeader("content-type", "application/x-www-form-urlencoded")
+        xhr.setRequestHeader("cache-control", "no-cache")
+        xhr.setRequestHeader("postman-token", "88efa6a2-5c23-4a60-e6e0-168aa00917d1")
+
+        xhr.send(data)
+    }
+  }
+  // ready () {
+  //   this.$http.post('https://anvil-payments.herokuapp.com/api/login', {email: 'f', password: 'f'}).then((response) => {
+  //     console.log('success')
+  //   }, (response) => {
+  //     console.log('error')
+  //   })
+  // }
+
 }
 </script>
 

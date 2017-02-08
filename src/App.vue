@@ -7,6 +7,7 @@
 
 <script>
 import Home from './components/Home'
+import _ from 'lodash'
 export default {
   name: 'app',
   components: {

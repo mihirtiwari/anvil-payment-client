@@ -17,7 +17,7 @@
                     </div>
                 </div>
                 <div style="margin-top: 30px">
-                    <button class="btn btn-warning" v-on:click="submit()">
+                    <button class="btn btn-warning" v-on:click="submit">
                         Submit
                     </button>
                 </div>
@@ -28,6 +28,8 @@
 
 <script>
 // import auth from '../auth'
+// import Vue from 'vue'
+import {router} from '../main.js'
 export default {
   name: 'login',
   data: function () {
@@ -38,24 +40,34 @@ export default {
       }
     }
   },
-  // data () {
-  //   return {
-  //     credentials: {
-  //       email: '',
-  //       password: ''
-  //     },
-  //     error: ''
-  //   }
-  // },
   methods: {
+      //change this
     submit: function () {
-      var cred = {
-        email: this.credentials.email,
-        password: this.credentials.password
-      }
-      window.alert(cred.email + ' ' + cred.password)
+        var data = "password=" + this.credentials.password + "&email=" + this.credentials.email
+        var xhr = new XMLHttpRequest()
+        xhr.withCredentials = true
+        xhr.addEventListener("readystatechange", function () {
+            if (this.readyState === 4) {
+                var response = JSON.parse(this.responseText)
+                if (response["message"] === "Missing credentials"){
+                    window.alert("Please fill in all boxes")
+                }
+                else if (response["message"] === "User not found"){
+                    window.alert("Invalid email and/or password")
+                }
+                else {
+                    localStorage.setItem('token', response["token"])
+                    router.push('/payment')
+                }
+            }
+        })
+
+        xhr.open("POST", "https://anvil-payments.herokuapp.com/api/login")
+        xhr.setRequestHeader("content-type", "application/x-www-form-urlencoded")
+        xhr.setRequestHeader("cache-control", "no-cache")
+        xhr.setRequestHeader("postman-token", "bd076ec3-bcc4-2eb2-5105-95d5456accf3")
+        xhr.send(data)
     }
   }
-
 }
 </script>
