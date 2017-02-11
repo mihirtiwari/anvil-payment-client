@@ -29,7 +29,7 @@
 
                         <div class="form-group">
                             <p class="label">Card Number: </p>
-                            <input type="tel" size="20" class="form-control" placeholder="Card Number" data-stripe="number" v-model="details.number">
+                            <input type="tel" size="20" class="form-control" placeholder="Card Number" v-model="details.number">
                                 <!-- <span>Card Number</span>
                                 <input type="text" size="20" data-stripe="number">
                             </label> -->
@@ -37,12 +37,12 @@
 
                         <div class="form-group">
                             <p class="label">Expiration (MM/YY): </p>
-                            <input type="tel" size="5" class="form-control" data-stripe="exp_month_year" placeholder="MM/YY" v-model="details.exp_month_year">
+                            <input type="tel" size="5" class="form-control" placeholder="MM/YY" v-model="details.exp_month_year">
                         </div>
 
                         <div class="form-group">
                             <p class="label">CVC: </p>
-                            <input type="tel" class="form-control" size="4" data-stripe="cvc" placeholder="CVC" v-model="details.cvc">
+                            <input type="tel" class="form-control" size="4" placeholder="CVC" v-model="details.cvc">
                             <!-- <label>
                                 <span>CVC</span>
                                 <input type="text" size="4" data-stripe="cvc">
@@ -51,7 +51,7 @@
 
                         <div class="form-group">
                             <p class="label">Billing ZIP Code: </p>
-                            <input type="tel" class="form-control "size="6" data-stripe="address_zip" placeholder="Billing ZIP Code" v-model="details.zip">
+                            <input type="tel" class="form-control "size="6" placeholder="Billing ZIP Code" v-model="details.zip">
                             <!-- <label>
                                 <span>Billing ZIP Code</span>
                                 <input type="text" size="6" data-stripe="address_zip">
@@ -64,10 +64,10 @@
                 </div>
             </div>
         </div>
-        <script type="text/javascript" src="https://js.stripe.com/v2/"></script>
+        <!-- <script type="text/javascript" src="https://js.stripe.com/v2/"></script>
         <script type="text/javascript">
           Stripe.setPublishableKey('pk_test_oBBdu24osiO5GbUDP1t6PqSI');
-        </script>
+        </script> -->
     </div>
 </template>
 
@@ -81,39 +81,51 @@ export default {
           cvc: '',
           exp_month_year: '',
           zip: ''
-        }
+      },
+      token: ''
       }
     },
     methods: {
         submit: function () {
-            if (this.details.number === ''){
-                window.alert('Please put in a credit card number')
+            if (!Stripe.card.validateCardNumber(this.details.number)){
+                window.alert('Please put in a correct credit card number')
             }
-            else if (this.details.exp_month_year === ''){
-                window.alert('Please put in a expiration date')
+            else if (!Stripe.card.validateExpiry(this.details.exp_month_year)){
+                window.alert('Please put in a correct expiration date')
             }
-            else if (this.details.cvc === ''){
-                window.alert('Please put in a CVC')
+            else if (!Stripe.card.validateCVC(this.details.cvc)){
+                window.alert('Please put in a correct CVC')
             }
             else if (this.details.zip === ''){
                 window.alert('Please put in a zip')
             }
             else {
-            // var details = {
-            //     number: this.details.number,
-            //     cvc: this.details.cvc,
-            //     exp: this.details.exp_month_year,
-            //     address_zip: this.details.zip
-            // }
+            var details = {
+                number: this.details.number,
+                cvc: this.details.cvc,
+                exp: this.details.exp_month_year,
+                address_zip: this.details.zip
+            }
 
-            var data = "card=" + this.details.number + "&cvc=" + this.details.cvc + "&bzip=" + this.details.zip + "&exp=" + this.details.exp_month_year;
+            Stripe.card.createToken(details, function (status, response) {
+                if (response.error){
+                    window.alert("There was an error! Please re-enter the information")
+                }
+                else {
+                    var token = response.id
+                    localStorage.setItem('stripe_token', token)
+                }
+            })
+
+            var token = localStorage.getItem('stripe_token')
+
+            var data = "card=" + this.details.number + "&cvc=" + this.details.cvc + "&bzip=" + this.details.zip + "&exp=" + this.details.exp_month_year + "&stripe_token=" + token;
             var xhr = new XMLHttpRequest();
             xhr.withCredentials = true;
 
             xhr.addEventListener("readystatechange", function () {
                 if (this.readyState === 4) {
                     var res = JSON.parse(this.responseText)
-
                     window.location.href = "/#/confirmation"
                 }
             });
@@ -122,57 +134,13 @@ export default {
             xhr.setRequestHeader("content-type", "application/x-www-form-urlencoded");
             xhr.setRequestHeader("authorization", "Bearer " + localStorage.getItem('token'));
             xhr.setRequestHeader("cache-control", "no-cache");
-            //xhr.setRequestHeader("postman-token", "1ccc32a1-078d-bab1-0e49-a3242c3c4ad0");
+            xhr.setRequestHeader("postman-token", "1ccc32a1-078d-bab1-0e49-a3242c3c4ad0");
 
             xhr.send(data);
-            }
-            // var number = this.details.number
-
-            // Stripe.card.createToken({
-            //     number: 4242424242424242,
-            //     cvc: 123,
-            //     exp: '12 / 18',
-            //     address_zip: 12345
-            // }, stripeResponseHandler)
         }
-        // stripeResponseHandler: function () {
-        //     console.log("Status: " + status + " Response: " + response)
-        // }
+      }
     }
 }
-
-// function stripeResponseHandler(status, response) {
-//     if (response.error){
-//         window.alert("There was an error!")
-//     }
-//     else {
-//         var token = response.id
-//         console.log('made it')
-//         // $form.append($('<input type="hidden" name="stripeToken">').val(token));
-//         // $form.get(0).submit();
-//     }
-//   // Grab the form:
-//   // console.log("Status: " + status + " Response: " + response)
-//   // var $form = $('#payment-form');
-//   // console.log($form)
-//   // if (response.error) { // Problem!
-//   //   window.alert("There was an error!")
-//   //   // Show the errors on the form:
-//   //   // $form.find('.payment-errors').text(response.error.message);
-//   //   // $form.find('.submit').prop('disabled', false); // Re-enable submission
-//   //
-//   // } else { // Token was created!
-//   //
-//   //   // Get the token ID:
-//   //   var token = response.id;
-//   //
-//   //   // Insert the token ID into the form so it gets submitted to the server:
-//     // $form.append($('<input type="hidden" name="stripeToken">').val(token));
-//   //
-//   //   // Submit the form:
-//     // $form.get(0).submit();
-//   // }
-// };
 </script>
 
 <style>
