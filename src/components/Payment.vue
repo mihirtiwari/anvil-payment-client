@@ -24,12 +24,12 @@
                         <p>Expiration date: </p>
                         <input type="text" class="form-control" placeholder="Expiration Date">
                     </div> -->
-                    <form action="/your-charge-code" method="POST" id="payment-form">
+                    <form action="/your-charge-code" method="POST" id="payment-form" autocomplete="on">
                         <!-- <span class="payment-errors"></span> -->
 
                         <div class="form-group">
                             <p class="label">Card Number: </p>
-                            <input type="text" size="20" class="form-control" placeholder="Card Number" data-stripe="number" v-model="details.number">
+                            <input type="tel" size="20" class="form-control" placeholder="Card Number" data-stripe="number" v-model="details.number">
                                 <!-- <span>Card Number</span>
                                 <input type="text" size="20" data-stripe="number">
                             </label> -->
@@ -37,12 +37,12 @@
 
                         <div class="form-group">
                             <p class="label">Expiration (MM/YY): </p>
-                            <input type="text" size="5" class="form-control" data-stripe="exp_month_year" placeholder="MM/YY" v-model="details.exp_month_year">
+                            <input type="tel" size="5" class="form-control" data-stripe="exp_month_year" placeholder="MM/YY" v-model="details.exp_month_year">
                         </div>
 
                         <div class="form-group">
                             <p class="label">CVC: </p>
-                            <input type="text" class="form-control" size="4" data-stripe="cvc" placeholder="CVC" v-model="details.cvc">
+                            <input type="tel" class="form-control" size="4" data-stripe="cvc" placeholder="CVC" v-model="details.cvc">
                             <!-- <label>
                                 <span>CVC</span>
                                 <input type="text" size="4" data-stripe="cvc">
@@ -51,7 +51,7 @@
 
                         <div class="form-group">
                             <p class="label">Billing ZIP Code: </p>
-                            <input type="text" class="form-control "size="6" data-stripe="address_zip" placeholder="Billing ZIP Code" v-model="details.zip">
+                            <input type="tel" class="form-control "size="6" data-stripe="address_zip" placeholder="Billing ZIP Code" v-model="details.zip">
                             <!-- <label>
                                 <span>Billing ZIP Code</span>
                                 <input type="text" size="6" data-stripe="address_zip">
@@ -64,6 +64,10 @@
                 </div>
             </div>
         </div>
+        <script type="text/javascript" src="https://js.stripe.com/v2/"></script>
+        <script type="text/javascript">
+          Stripe.setPublishableKey('pk_test_oBBdu24osiO5GbUDP1t6PqSI');
+        </script>
     </div>
 </template>
 
@@ -118,7 +122,7 @@ export default {
             xhr.setRequestHeader("content-type", "application/x-www-form-urlencoded");
             xhr.setRequestHeader("authorization", "Bearer " + localStorage.getItem('token'));
             xhr.setRequestHeader("cache-control", "no-cache");
-            xhr.setRequestHeader("postman-token", "1ccc32a1-078d-bab1-0e49-a3242c3c4ad0");
+            //xhr.setRequestHeader("postman-token", "1ccc32a1-078d-bab1-0e49-a3242c3c4ad0");
 
             xhr.send(data);
             }
