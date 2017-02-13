@@ -7,7 +7,7 @@
             </div>
             <div class="col-md-8 col-md-offset-2" style="margin-top: 50px">
                 <p id="payment">Please enter the following information: </p>
-                <div class="col-md-offset-3">
+                <div class="col-md-offset-4">
                     <!-- <div class="form-group">
                         <p>First Name: </p>
                         <input type="text" class="form-control" placeholder="First Name">
@@ -29,7 +29,7 @@
 
                         <div class="form-group">
                             <p class="label">Card Number: </p>
-                            <input type="tel" size="20" class="form-control" placeholder="Card Number" v-model="details.number">
+                            <input type="tel" maxlength="12" class="form-control" placeholder="Card Number" v-model="details.number">
                                 <!-- <span>Card Number</span>
                                 <input type="text" size="20" data-stripe="number">
                             </label> -->
@@ -37,12 +37,12 @@
 
                         <div class="form-group">
                             <p class="label">Expiration (MM/YY): </p>
-                            <input type="tel" size="5" class="form-control" placeholder="MM/YY" v-model="details.exp_month_year">
+                            <input type="tel" maxlength="5" class="form-control" placeholder="MM/YY" v-model="details.exp_month_year">
                         </div>
 
                         <div class="form-group">
                             <p class="label">CVC: </p>
-                            <input type="tel" class="form-control" size="4" placeholder="CVC" v-model="details.cvc">
+                            <input type="tel" class="form-control" maxlength="3" placeholder="CVC" v-model="details.cvc">
                             <!-- <label>
                                 <span>CVC</span>
                                 <input type="text" size="4" data-stripe="cvc">
@@ -51,7 +51,7 @@
 
                         <div class="form-group">
                             <p class="label">Billing ZIP Code: </p>
-                            <input type="tel" class="form-control "size="6" placeholder="Billing ZIP Code" v-model="details.zip">
+                            <input type="tel" class="form-control" maxlength="5" placeholder="Billing ZIP Code" v-model="details.zip">
                             <!-- <label>
                                 <span>Billing ZIP Code</span>
                                 <input type="text" size="6" data-stripe="address_zip">
@@ -64,10 +64,6 @@
                 </div>
             </div>
         </div>
-        <!-- <script type="text/javascript" src="https://js.stripe.com/v2/"></script>
-        <script type="text/javascript">
-          Stripe.setPublishableKey('pk_test_oBBdu24osiO5GbUDP1t6PqSI');
-        </script> -->
     </div>
 </template>
 
@@ -146,11 +142,12 @@ export default {
 <style>
 .label {
     text-align: left;
+    color: red;
 }
 
 #payment {
     font-weight: bold;
-    text-align: left;
+    text-align: center;;
 }
 
 .expiration {
