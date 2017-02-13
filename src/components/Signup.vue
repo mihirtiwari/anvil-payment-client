@@ -19,7 +19,6 @@
                         <p>Email: </p>
                         <input type="email" class="form-control" placeholder="email@email.com" v-model="credentials.email">
                     </div>
-                    <!-- need to check for passwords matching and that no field is empty -->
                     <div class="form-group">
                         <p>Password: </p>
                         <input type="password" class="form-control" placeholder="Enter your password" v-model="credentials.password">
@@ -98,14 +97,6 @@ export default {
         }
     }
   }
-  // ready () {
-  //   this.$http.post('https://anvil-payments.herokuapp.com/api/login', {email: 'f', password: 'f'}).then((response) => {
-  //     console.log('success')
-  //   }, (response) => {
-  //     console.log('error')
-  //   })
-  // }
-
 }
 </script>
 

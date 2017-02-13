@@ -17,11 +17,9 @@
                     </div>
                 </div>
                 <div style="margin-top: 30px">
-                    <!-- <button class="btn btn-warning" v-on:click="submit"> -->
-                    <router-link to="/payment">
+                    <button class="btn btn-warning" v-on:click="submit">
                         Submit
-                    </router-link>
-                    <!-- </button> -->
+                    </button>
                 </div>
             </div>
         </div>
@@ -50,41 +48,33 @@ export default {
       //change this
     submit: function () {
         var data = "password=" + this.credentials.password + "&email=" + this.credentials.email
-        var res = submitrequest(data)
+        var xhr = new XMLHttpRequest()
+        xhr.withCredentials = true
+        xhr.addEventListener("readystatechange", function () {
+            if (this.readyState === 4) {
+                var response = JSON.parse(this.responseText)
+                if (response["message"] === "Missing credentials"){
+                    window.alert("Please fill in all boxes")
+                }
+                else if (response["message"] === "Password is wrong"){
+                    window.alert("Invalid password")
+                }
+                else if (response["message"] === "User not found"){
+                    window.alert("Invalid email and/or password")
+                }
+                else {
+                    localStorage.setItem('token', response["token"])
+                    window.location.href = "/#/payment"
+                }
+            }
+        })
+
+        xhr.open("POST", "https://anvil-payments.herokuapp.com/api/login")
+        xhr.setRequestHeader("content-type", "application/x-www-form-urlencoded")
+        xhr.setRequestHeader("cache-control", "no-cache")
+        xhr.setRequestHeader("postman-token", "bd076ec3-bcc4-2eb2-5105-95d5456accf3")
+        xhr.send(data)
     }
   }
 }
-
-function submitrequest(data) {
-    var xhr = new XMLHttpRequest()
-    xhr.withCredentials = true
-    xhr.addEventListener("readystatechange", function () {
-        if (this.readyState === 4) {
-            var response = JSON.parse(this.responseText)
-            if (response["message"] === "Missing credentials"){
-                // window.alert("Please fill in all boxes")
-                return -2
-            }
-            else if (response["message"] === "Password is wrong"){
-                // window.alert("Invalid password")
-                return -1
-            }
-            else if (response["message"] === "User not found"){
-                // window.alert("Invalid email and/or password")
-                return 0
-            }
-            else {
-                localStorage.setItem('token', response["token"])
-                // window.location.href = "/#/payment"
-                return 1
-            }
-        }
-    })
-
-    xhr.open("POST", "https://anvil-payments.herokuapp.com/api/login")
-    xhr.setRequestHeader("content-type", "application/x-www-form-urlencoded")
-    xhr.setRequestHeader("cache-control", "no-cache")
-    xhr.setRequestHeader("postman-token", "bd076ec3-bcc4-2eb2-5105-95d5456accf3")
-    xhr.send(data)
-};
 </script>
