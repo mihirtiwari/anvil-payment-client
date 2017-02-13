@@ -9,13 +9,13 @@
                 <div class="col-md-offset-4">
                     <div class="form-group">
                         <p>Card Number: </p>
-                        <input type="text" maxlength="12" class="form-control" placeholder="Card Number" v-model="details.number">
+                        <input type="text" maxlength="16" class="form-control" placeholder="Card Number" v-model="details.number">
                     </div>
                     <div class="form-group">
                         <p>Expiration Date: </p>
                         <div>
                             <input type="text" maxlength="2" class="form-control exp" placeholder="MM" v-model="details.exp_month">
-                            <input type="text" maxlength="2" class="form-control exp" placeholder="DD" v-model="details.exp_year">
+                            <input type="text" maxlength="2" class="form-control exp" placeholder="YY" v-model="details.exp_year">
                         </div>
                     </div>
                     <div class="form-group" style="clear: left">
@@ -83,7 +83,7 @@ export default {
             })
 
             var token = localStorage.getItem('stripe_token')
-            var exp_month_year = this.details.month + "/" + this.details.year
+            var exp_month_year = this.details.exp_month + this.details.exp_year
 
             var data = "card=" + this.details.number + "&cvc=" + this.details.cvc + "&bzip=" + this.details.zip + "&exp=" + exp_month_year + "&stripe_token=" + token;
             var xhr = new XMLHttpRequest();
