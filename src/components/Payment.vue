@@ -8,6 +8,10 @@
             <div class="col-md-8 col-md-offset-2" style="margin-top: 50px">
                 <div class="col-md-offset-4">
                     <div class="form-group">
+                        <p>Cardholder Name: </p>
+                        <input type="text" class="form-control" placeholder="Cardholder Name" v-model="details.name">
+                    </div>
+                    <div class="form-group">
                         <p>Card Number: </p>
                         <input type="text" maxlength="16" class="form-control" placeholder="Card Number" v-model="details.number">
                     </div>
@@ -45,7 +49,8 @@ export default {
           cvc: '',
           exp_month: '',
           exp_year: '',
-          zip: ''
+          zip: '',
+          name: ''
         }
       }
     },
@@ -67,42 +72,43 @@ export default {
             var details = {
                 number: this.details.number,
                 cvc: this.details.cvc,
-                exp_month: this.details.exp_month,
-                exp_year: this.details.exp_year,
-                address_zip: this.details.zip
+                exp: this.details.exp_month + "/" + this.details.exp_year,
+                address_zip: this.details.zip,
+                name: this.details.name
             }
 
+            var exp_month_year = this.details.exp_month + this.details.exp_year
+            var cardNumber = this.details.number
+            var cvc = this.details.cvc
+            var bzip = this.details.zip
             Stripe.card.createToken(details, function (status, response) {
                 if (response.error){
-                    window.alert("There was an error! Please re-enter the information")
+                    window.alert("Stripe error: " + response.error["message"]);
                 }
                 else {
                     var token = response.id
                     localStorage.setItem('stripe_token', token)
+
+                    var data = "card=" + cardNumber + "&cvc=" + cvc + "&bzip=" + bzip + "&exp=" + exp_month_year + "&stripe_token=" + token;
+                    var xhr = new XMLHttpRequest();
+                    xhr.withCredentials = true;
+
+                    xhr.addEventListener("readystatechange", function () {
+                        if (this.readyState === 4) {
+                            var res = JSON.parse(this.responseText)
+                            window.location.href = "/#/confirmation"
+                        }
+                    });
+
+                    xhr.open("POST", "https://anvil-payments.herokuapp.com/api/pay");
+                    xhr.setRequestHeader("content-type", "application/x-www-form-urlencoded");
+                    xhr.setRequestHeader("authorization", "Bearer " + localStorage.getItem('token'));
+                    xhr.setRequestHeader("cache-control", "no-cache");
+                    xhr.setRequestHeader("postman-token", "1ccc32a1-078d-bab1-0e49-a3242c3c4ad0");
+
+                    xhr.send(data);
                 }
             })
-
-            var token = localStorage.getItem('stripe_token')
-            var exp_month_year = this.details.exp_month + this.details.exp_year
-
-            var data = "card=" + this.details.number + "&cvc=" + this.details.cvc + "&bzip=" + this.details.zip + "&exp=" + exp_month_year + "&stripe_token=" + token;
-            var xhr = new XMLHttpRequest();
-            xhr.withCredentials = true;
-
-            xhr.addEventListener("readystatechange", function () {
-                if (this.readyState === 4) {
-                    var res = JSON.parse(this.responseText)
-                    window.location.href = "/#/confirmation"
-                }
-            });
-
-            xhr.open("POST", "https://anvil-payments.herokuapp.com/api/pay");
-            xhr.setRequestHeader("content-type", "application/x-www-form-urlencoded");
-            xhr.setRequestHeader("authorization", "Bearer " + localStorage.getItem('token'));
-            xhr.setRequestHeader("cache-control", "no-cache");
-            xhr.setRequestHeader("postman-token", "1ccc32a1-078d-bab1-0e49-a3242c3c4ad0");
-
-            xhr.send(data);
         }
       }
     }

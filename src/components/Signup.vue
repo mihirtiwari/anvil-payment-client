@@ -88,7 +88,7 @@ export default {
                 }
             })
 
-            xhr.open("POST", "https://anvil-payments.herokuapp.com/api/login")
+            xhr.open("POST", "https://anvil-payments.herokuapp.com/api/register")
             xhr.setRequestHeader("content-type", "application/x-www-form-urlencoded")
             xhr.setRequestHeader("cache-control", "no-cache")
             xhr.setRequestHeader("postman-token", "88efa6a2-5c23-4a60-e6e0-168aa00917d1")
